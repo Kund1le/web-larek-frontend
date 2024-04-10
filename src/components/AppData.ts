@@ -5,6 +5,9 @@ export type CatalogChangeEvent = {
   catalog: CardItem[];
 }
 
+/* Не совсем понимаю, почему нельзя использовать этот класс, учитывая то, что в проекте-примере структура именно такая
+https://github.com/yandex-praktikum/ono-tebe-nado-oop
+*/
 export class CardItem extends Model<ICardItem> {
   description: string;
   id: string;
@@ -39,8 +42,12 @@ export class AppState extends Model<IAppState> {
     this.setOrderData();
   }
 
+  BasketRemove(): boolean {
+    return this.basket.length === 0;
+  }
 
-  //очистка данных в заказе
+
+  //очистка данных заказа
   clearOrder() {
     this.order = {
       email: '',
@@ -49,18 +56,9 @@ export class AppState extends Model<IAppState> {
       payment: '',
       items: [],
       total: 0
-    }
-  }
-
-
-  //очистка корзины
-  clearBasket() {
-    this.basket.forEach((item) => (item.selected = false));
-  }
-
-  //сброс корзины
-  resetBasket() {
+    };
     this.basket = [];
+    this.basket.forEach((item) => (item.selected = false));
   }
 
   //сумма заказа
@@ -80,7 +78,7 @@ export class AppState extends Model<IAppState> {
   }
 
   //счетчик товаров в корзине
-  get count() {
+  getBasketCounter() {
     return this.basket.length;
   }
 

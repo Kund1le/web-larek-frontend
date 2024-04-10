@@ -2,11 +2,12 @@ import { Component } from "../base/components";
 import { createElement, ensureElement } from "../../utils/utils";
 import { EventEmitter } from "../base/events";
 import { IBasketView } from "../../types";
+import { CardItem } from "../AppData";
 
 export class Basket extends Component<IBasketView> {
   protected _list: HTMLElement;
   protected _total: HTMLElement;
-  protected _button: HTMLButtonElement;
+   _button: HTMLButtonElement;
   
 
   constructor(container: HTMLElement, events: EventEmitter) {
@@ -40,7 +41,7 @@ export class Basket extends Component<IBasketView> {
     this.setText(this._total, `${total} синапсов`);
   }
 
-  set selected(items: string[]) {
+  set selected(items: CardItem[]) {
     if (items.length) {
       this.setDisabled(this._button, false);
   } else {
@@ -48,7 +49,7 @@ export class Basket extends Component<IBasketView> {
     }
   }
 
-  updatBasketData() {
+  updatBasket() {
     Array.from(this._list.children).forEach((item, index) => {
 			const element = item.querySelector(`.basket__item-index`);
 			if (element) {
@@ -58,6 +59,6 @@ export class Basket extends Component<IBasketView> {
   }
 
   toggleButton(state: boolean) {
-    this._button.disabled = state;
+    this.setDisabled(this._button, state);
   }
 }

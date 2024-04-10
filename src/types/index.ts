@@ -4,7 +4,7 @@ export interface ICardItem {
   description: string,
   image: string,
   category: string,
-  price: number,
+  price: number | null,
   button: ICardItem[],
   count?: string;
   index: number;

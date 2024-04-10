@@ -104,19 +104,7 @@ events.on('modal:close', () => {
 events.on('card:add', (item: CardItem) => {
   appData.addCardBasket(item);
   item.selected = true;
-  page.counter = appData.count;
-})
-
-//удалить товар из корзины
-events.on('card:remove', (item: CardItem) => {
-  appData.removeCardBasket(item);
-  item.selected = false;
-  basket.total = appData.getTotal();
-  page.counter = appData.count;
-  basket.updatBasketData();
-  if(appData.count === 0) {
-    basket.toggleButton(true);
-  }
+  page.counter = appData.getBasketCounter();
 })
 
 //открыть корзину
@@ -148,10 +136,33 @@ events.on('basket:open', () => {
 events.on('card:remove', (item: CardItem) => {
   item.selected = false;
   appData.removeCard(item.id);
-  page.counter = appData.count;
+  page.counter = appData.getBasketCounter();
   basket.total = appData.getTotal();
-  events.emit('basket:open')
+  if(appData.getBasketCounter() === 0) {
+    basket.toggleButton(true);
+  }
+  events.emit('basket:change');
 });
+
+
+//изменение в корзине
+events.on('basket:change', () => {
+  basket.items = appData.basket.map((item) => {
+    const card = new BasketCard(cloneTemplate(cardBasketTemplate), {
+      onClick: () => {
+        events.emit('basket:remove', {itemId: item.id});
+      }
+    });
+    return card.render({
+      title: item.title,
+      price: item.price
+    })
+  });
+  appData.order.items = appData.basket.map(({id}) => id);
+  appData.order.total = appData.basket.reduce((accumulator, {price}) => price + accumulator, 0);
+  basket.selected = appData.basket;
+  basket.total = appData.getTotal()
+})
 
 //оформить заказ
 events.on('order:open', () => {
@@ -207,8 +218,6 @@ events.on('contacts:submit', () => {
     events.emit('order:success', result);
     page.counter = 0;
     appData.clearOrder();
-    appData.clearBasket();
-    appData.resetBasket();
   })
   .catch((err) => {
     console.error(err);
