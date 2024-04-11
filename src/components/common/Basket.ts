@@ -1,8 +1,7 @@
 import { Component } from "../base/components";
 import { createElement, ensureElement } from "../../utils/utils";
 import { EventEmitter } from "../base/events";
-import { IBasketView } from "../../types";
-import { CardItem } from "../AppData";
+import { IBasketView, ICardItem } from "../../types";
 
 export class Basket extends Component<IBasketView> {
   protected _list: HTMLElement;
@@ -41,7 +40,7 @@ export class Basket extends Component<IBasketView> {
     this.setText(this._total, `${total} синапсов`);
   }
 
-  set selected(items: CardItem[]) {
+  set selected(items: ICardItem[]) {
     if (items.length) {
       this.setDisabled(this._button, false);
   } else {

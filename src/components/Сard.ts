@@ -1,10 +1,9 @@
 import { Component } from "./base/components";
 import { ICardActions, ICardItem, ICatalog, IBasketCard } from "../types";
 import { ensureElement } from "../utils/utils";
-import { CardItem } from "./AppData";
 import { cardCategory } from "../utils/constants";
 
-export class Card<T> extends Component<ICardItem> {
+export class Card extends Component<ICardItem> {
   protected _title: HTMLElement;
   protected _image?: HTMLImageElement;
   protected _price: HTMLElement;
@@ -105,7 +104,7 @@ export type BasketCardSttus = {
   index: number
 }
 
-export class BasketCard extends Card<ICardActions> {
+export class BasketCard extends Card {
   protected _title: HTMLElement;
   protected _index: HTMLElement;
   protected _button: HTMLButtonElement;
@@ -142,7 +141,7 @@ export class BasketCard extends Card<ICardActions> {
     description: string
   }
 
-export class CardPreview extends Card<CardPreviewDes> {
+export class CardPreview extends Card {
   protected _description: HTMLElement;
 
   constructor(container: HTMLElement, actions?: ICardActions) {

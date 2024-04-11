@@ -5,10 +5,11 @@ export interface ICardItem {
   image: string,
   category: string,
   price: number | null,
-  button: ICardItem[],
+  button?: ICardItem[],
   count?: string;
-  index: number;
-  selected: boolean;
+  index?: number;
+  selected?: boolean;
+  status?: boolean
 }
 
 export interface IAppState {

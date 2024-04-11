@@ -1,29 +1,21 @@
 import {Model} from './base/model';
 import { FormErrors, IAppState, ICardItem, IOrder, IOrderForm } from '../types';
+import { BasketCard, Card } from './Сard';
 
 export type CatalogChangeEvent = {
-  catalog: CardItem[];
+  catalog: ICardItem[];
 }
 
-/* Не совсем понимаю, почему нельзя использовать этот класс, учитывая то, что в проекте-примере структура именно такая
-https://github.com/yandex-praktikum/ono-tebe-nado-oop
+/* 
+Спасибо большое за объяснение <3
 */
-export class CardItem extends Model<ICardItem> {
-  description: string;
-  id: string;
-  image: string;
-  title: string;
-  price: number;
-  category: string;
-  selected: boolean;
-  status: boolean;
-}
+
 
 
 //хранение данных
 export class AppState extends Model<IAppState> {
-  basket: CardItem[] = [];
-  catalog: CardItem[];
+  basket: ICardItem[] = [];
+  catalog: ICardItem[];
   order: IOrder = {
     email: '',
     phone: '',
@@ -67,8 +59,22 @@ export class AppState extends Model<IAppState> {
   }
 
   //каталог главной страницы
-  setCatalog(items?: ICardItem[]) {
-    this.catalog = items.map(item => new CardItem(item, this.events));
+  /*setCatalog(items?: HTMLElement[]) {
+    this.catalog = items.map(item => new BasketCard(item, this.events));
+    this.emitChanges('items:changed', {catalog: this.catalog});
+  }*/
+
+  setCatalog(items: ICardItem[]) {
+    this.catalog = items.map((item) => {
+      return {
+        id: item.id,
+        description: item.description,
+        image: item.image,
+        title: item.title,
+        category: item.category,
+        price: item.price
+      };
+    });
     this.emitChanges('items:changed', {catalog: this.catalog});
   }
 
@@ -83,12 +89,12 @@ export class AppState extends Model<IAppState> {
   }
 
   //добавить товар в корзину
-  addCardBasket(item: CardItem) {
+  addCardBasket(item: ICardItem) {
     this.basket.push(item);
   }
 
   //удалить товар из корзины
-  removeCardBasket(card: CardItem) {
+  removeCardBasket(card: ICardItem) {
     this.basket = this.basket.filter((item) => item.id !== card.id);
   }
 

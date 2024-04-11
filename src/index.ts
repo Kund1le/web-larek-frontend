@@ -2,7 +2,7 @@ import './scss/styles.scss';
 import { LarekApi } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { EventEmitter } from './components/base/events';
-import { AppState, CatalogChangeEvent, CardItem } from './components/AppData';
+import { AppState, CatalogChangeEvent } from './components/AppData';
 import { Page } from './components/Page';
 import { BasketCard, Card, CardPreview } from './components/Сard';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
@@ -66,7 +66,7 @@ events.on('items:changed', () => {
 })
 
 //открыть карточку товара
-events.on('card:select', (item: CardItem) => {
+events.on('card:select', (item: ICardItem) => {
   const card = new Card(cloneTemplate(cardPreviewTemplate), {
     onClick: () => {
       if(item.selected) {
@@ -101,7 +101,7 @@ events.on('modal:close', () => {
 });
 
 //добавить товар в корзину
-events.on('card:add', (item: CardItem) => {
+events.on('card:add', (item: ICardItem) => {
   appData.addCardBasket(item);
   item.selected = true;
   page.counter = appData.getBasketCounter();
@@ -133,7 +133,7 @@ events.on('basket:open', () => {
 
 
 //удалить товар(ы) из корзины
-events.on('card:remove', (item: CardItem) => {
+events.on('card:remove', (item: ICardItem) => {
   item.selected = false;
   appData.removeCard(item.id);
   page.counter = appData.getBasketCounter();
