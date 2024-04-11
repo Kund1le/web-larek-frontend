@@ -58,20 +58,14 @@ export class AppState extends Model<IAppState> {
     return this.basket.reduce((total, item) => total + item.price, 0);
   }
 
-  //каталог главной страницы
-  /*setCatalog(items?: HTMLElement[]) {
-    this.catalog = items.map(item => new BasketCard(item, this.events));
-    this.emitChanges('items:changed', {catalog: this.catalog});
-  }*/
-
   setCatalog(items: ICardItem[]) {
     this.catalog = items.map((item) => {
       return {
-        id: item.id,
-        description: item.description,
-        image: item.image,
         title: item.title,
+        description: item.description,
         category: item.category,
+        id: item.id,
+        image: item.image,
         price: item.price
       };
     });
