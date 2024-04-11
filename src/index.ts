@@ -147,21 +147,25 @@ events.on('card:remove', (item: CardItem) => {
 
 //изменение в корзине
 events.on('basket:change', () => {
+  page.counter = appData.basket.length
+  let total = 0
   basket.items = appData.basket.map((item) => {
     const card = new BasketCard(cloneTemplate(cardBasketTemplate), {
       onClick: () => {
-        events.emit('basket:remove', {itemId: item.id});
+        appData.removeCardBasket(item);
+        basket.total = appData.getTotal();
+        events.emit('card:remove', {itemId: item.id})
       }
     });
+    total += item.price;
     return card.render({
       title: item.title,
       price: item.price
     })
-  });
-  appData.order.items = appData.basket.map(({id}) => id);
-  appData.order.total = appData.basket.reduce((accumulator, {price}) => price + accumulator, 0);
+  })
+  basket.total = total;
+  appData.order.total = total;
   basket.selected = appData.basket;
-  basket.total = appData.getTotal()
 })
 
 //оформить заказ
