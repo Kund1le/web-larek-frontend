@@ -171,15 +171,11 @@ events.on('basket:change', () => {
 //оформить заказ
 events.on('order:open', () => {
   modal.render({
-    content: order.render({
-      payment: '',
-      address: '',
-      valid: false,
-      errors: []
-    })
+    content: basket.render()
   });
   modal.open();
 });
+//Неправильно поняла сначала, теперь ясно. Еще раз спасибо большое за объяснение
   
 //валидация первого этапа заказа
 events.on(/^order\..*:change/, (data: {field: keyof IOrderForm, value: string}) => {
