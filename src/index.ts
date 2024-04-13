@@ -143,7 +143,7 @@ events.on('basket:change', () => {
       onClick: () => {
         appData.removeCardBasket(item);
         basket.total = appData.getTotal();
-        events.emit('card:remove', {itemId: item.id})
+        events.emit('card:remove', item);
       }
     });
     total += item.price;
