@@ -66,6 +66,11 @@ events.on('items:changed', () => {
 })
 
 //открыть карточку товара
+events.on('card:open', (item: ICardItem) => {
+  appData.setPreviewCard(item)
+})
+
+
 events.on('card:select', (item: ICardItem) => {
   const card = new Card(cloneTemplate(cardPreviewTemplate), {
     onClick: () => {
@@ -109,26 +114,10 @@ events.on('card:add', (item: ICardItem) => {
 
 //открыть корзину
 events.on('basket:open', () => {
-  events.emit('modal:open');
-  const cards = appData.basket.map((item, index) => {
-    const card = new Card(cloneTemplate(cardBasketTemplate), {
-      onClick: () => {
-        events.emit('card:remove', item);
-      },
-    });
-    return card.render({
-      title: item.title,
-      price: item.price,
-      index: index + 1,
-    });
-  });
+  events.emit('basket:change')
   modal.render({
-    content: basket.render({
-      items: cards,
-      total: appData.getTotal(),
-    }),
+    content: basket.render(),
   });
-  basket.toggleButton(!appData.basket.length);
 });
 
 
@@ -168,14 +157,19 @@ events.on('basket:change', () => {
   basket.selected = appData.basket;
 })
 
-//оформить заказ
-events.on('order:open', () => {
-  modal.render({
-    content: basket.render()
-  });
-  modal.open();
-});
-//Неправильно поняла сначала, теперь ясно. Еще раз спасибо большое за объяснение
+//оформить заказ 
+
+events.on('order:open', () => { 
+  modal.render({ 
+    content: order.render({ 
+      payment: '', 
+      address: '',
+      valid: false, 
+      errors: [] 
+    }) 
+  }); 
+  modal.open(); 
+}); 
   
 //валидация первого этапа заказа
 events.on(/^order\..*:change/, (data: {field: keyof IOrderForm, value: string}) => {
