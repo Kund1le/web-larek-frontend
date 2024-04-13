@@ -25,6 +25,7 @@ export class AppState extends Model<IAppState> {
     payment: ''
   };
 
+  preview: string | null
   formErrors: FormErrors = {};
 
 
@@ -38,6 +39,9 @@ export class AppState extends Model<IAppState> {
     return this.basket.length === 0;
   }
 
+  setPreviewCard(item: ICardItem) {
+    this.preview = item.id;
+  }
 
   //очистка данных заказа
   clearOrder() {
@@ -85,11 +89,13 @@ export class AppState extends Model<IAppState> {
   //добавить товар в корзину
   addCardBasket(item: ICardItem) {
     this.basket.push(item);
+    this.emitChanges('basket:change')
   }
 
   //удалить товар из корзины
   removeCardBasket(card: ICardItem) {
     this.basket = this.basket.filter((item) => item.id !== card.id);
+    this.emitChanges('basket:change')
   }
 
   //установка и проверка значений в заказе
